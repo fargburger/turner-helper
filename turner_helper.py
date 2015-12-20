@@ -345,7 +345,10 @@ class PointyThing(pygame.sprite.Sprite):
 	def load_from_file(self, filename=POINTYTHING_CONFIG_FILENAME):
 		config = configparser.ConfigParser()
 		config.read(filename)
-		settings = config['SETTINGS']
+		if 'SETTINGS' in config:
+			settings = config['SETTINGS']
+		else:
+			settings = {}
 		self.x = int(settings.get('x', INITIAL_X))
 		self.y = int(settings.get('y', INITIAL_Y))
 		self.tool_angle_dividend = float(settings.get('tool_angle_dividend', INITIAL_TOOL_ANGLE_DIVIDEND)) 

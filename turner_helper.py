@@ -44,13 +44,14 @@ class TurnerHelper(object):
 		self.pointything = PointyThing()
 		self.pointything.load_from_file()
 		self.colorchanger = ColorChanger()
+		
 		self.allsprites = pygame.sprite.RenderPlain((self.pointything, self.colorchanger))
 		if not self.clist:
 			raise ValueError("Sorry, no cameras detected.")
 		self.cam = pygame.camera.Camera(self.clist[0], self.size)
 		self.cam.start()
 		self.snapshot = pygame.surface.Surface(self.size, 0, self.display)
-		
+			
 
 	def get_and_flip(self, should_update):
 		if self.cam.query_image():
@@ -160,7 +161,7 @@ class ColorChanger(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
 
-
+		self.label_font = pygame.font.SysFont("sans", 10)
 		self.color_queue = [INITIAL_COLOR, RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE, CYAN]
 
 		#COLOR FOR TOOL
@@ -241,12 +242,64 @@ class ColorChanger(pygame.sprite.Sprite):
 	def update(self):
 		surface = pygame.display.get_surface()
 		pygame.gfxdraw.box(surface, self.color_box_rect, self.color_queue[0] ) 
+
+		plus_A = self.tool_depth_more_button_rect.midright
+		line_length = int(self.tool_depth_more_button_rect.width / 6)
+		plus_B = (plus_A[0] - int(self.tool_depth_more_button_rect.width / 3), plus_A[1])
+		plus_C = (plus_A[0] - line_length, plus_A[1] - line_length)
+		plus_D = (plus_A[0] - line_length, plus_A[1] + line_length)
+		pygame.gfxdraw.line(surface, plus_A[0], plus_A[1], plus_B[0], plus_B[1], GREEN)
+		pygame.gfxdraw.line(surface, plus_C[0], plus_C[1], plus_D[0], plus_D[1], GREEN)
+		minus_A = self.tool_depth_less_button_rect.midleft 
+		minus_B = (minus_A[0] + int(self.tool_depth_more_button_rect.width / 3), minus_A[1])
+		pygame.gfxdraw.line(surface, minus_A[0], minus_A[1], minus_B[0], minus_B[1], GREEN)		
+
+		tool_depth_label = self.label_font.render("Depth", 1, (200, 0, 200, 200))
+		tool_depth_label_rect = tool_depth_label.get_rect()
+		tool_depth_label_rect.center = self.tool_depth_more_button_rect.midleft
+		surface.blit(tool_depth_label, tool_depth_label_rect.topleft)
+
+
+		plus_A = self.tool_angle_more_button_rect.midright
+		line_length = int(self.tool_angle_more_button_rect.width / 6)
+		plus_B = (plus_A[0] - int(self.tool_angle_more_button_rect.width / 3), plus_A[1])
+		plus_C = (plus_A[0] - line_length, plus_A[1] - line_length)
+		plus_D = (plus_A[0] - line_length, plus_A[1] + line_length)
+		pygame.gfxdraw.line(surface, plus_A[0], plus_A[1], plus_B[0], plus_B[1], GREEN)
+		pygame.gfxdraw.line(surface, plus_C[0], plus_C[1], plus_D[0], plus_D[1], GREEN)
+		minus_A = self.tool_angle_less_button_rect.midleft 
+		minus_B = (minus_A[0] + int(self.tool_angle_more_button_rect.width / 3), minus_A[1])
+		pygame.gfxdraw.line(surface, minus_A[0], minus_A[1], minus_B[0], minus_B[1], GREEN)		
+
+
+		tool_angle_label = self.label_font.render("Angle", 1, (200, 0, 200, 200))
+		tool_angle_label_rect = tool_angle_label.get_rect()
+		tool_angle_label_rect.center = self.tool_angle_more_button_rect.midleft
+		surface.blit(tool_angle_label, tool_angle_label_rect.topleft)
+	
+
+		plus_A = self.bar_1_width_more_button_rect.midright
+		line_length = int(self.bar_1_width_more_button_rect.width / 6)
+		plus_B = (plus_A[0] - int(self.bar_1_width_more_button_rect.width / 3), plus_A[1])
+		plus_C = (plus_A[0] - line_length, plus_A[1] - line_length)
+		plus_D = (plus_A[0] - line_length, plus_A[1] + line_length)
+		pygame.gfxdraw.line(surface, plus_A[0], plus_A[1], plus_B[0], plus_B[1], GREEN)
+		pygame.gfxdraw.line(surface, plus_C[0], plus_C[1], plus_D[0], plus_D[1], GREEN)
+		minus_A = self.bar_1_width_less_button_rect.midleft 
+		minus_B = (minus_A[0] + int(self.bar_1_width_more_button_rect.width / 3), minus_A[1])
+		pygame.gfxdraw.line(surface, minus_A[0], minus_A[1], minus_B[0], minus_B[1], GREEN)		
+
+		bar_1_width_label = self.label_font.render("Bar Width", 1, (200, 0, 200, 200))
+		bar_1_width_label_rect = bar_1_width_label.get_rect()
+		bar_1_width_label_rect.center = self.bar_1_width_more_button_rect.midleft
+		surface.blit(bar_1_width_label, bar_1_width_label_rect.topleft)
+		
 		pygame.gfxdraw.box(surface, self.tool_depth_more_button_rect, GRAY)
-		pygame.gfxdraw.box(surface, self.tool_depth_less_button_rect, NAVYBLUE)
-		pygame.gfxdraw.box(surface, self.tool_angle_more_button_rect, WHITE)
-		pygame.gfxdraw.box(surface, self.tool_angle_less_button_rect, RED)
-		pygame.gfxdraw.box(surface, self.bar_1_width_more_button_rect, GREEN)
-		pygame.gfxdraw.box(surface, self.bar_1_width_less_button_rect, BLUE)
+		pygame.gfxdraw.box(surface, self.tool_depth_less_button_rect, GRAY)
+		pygame.gfxdraw.box(surface, self.tool_angle_more_button_rect, GRAY)
+		pygame.gfxdraw.box(surface, self.tool_angle_less_button_rect, GRAY)
+		pygame.gfxdraw.box(surface, self.bar_1_width_more_button_rect, GRAY)
+		pygame.gfxdraw.box(surface, self.bar_1_width_less_button_rect, GRAY)
 
 
 TOOL_ANGLE_INCREMENT = 0.5
